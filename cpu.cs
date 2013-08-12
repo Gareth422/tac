@@ -98,13 +98,11 @@ namespace CPUEm
 			Console.WriteLine("CPUEm");
 			CPU cpu = new CPU();
 			//uint op = (uint)Convert.ToInt32("00001000000000000101010000011111", 2);
-			cpu.RunOp((uint)Convert.ToInt32("00000100000000100000000000001010", 2));
-			cpu.RunOp((uint)Convert.ToInt32("00000100000000110000000000000010", 2));
-			cpu.RunOp((uint)Convert.ToInt32("00001100000000000000010001000011", 2));
 			Console.WriteLine(cpu.GetRegister(1));
-			Console.WriteLine(cpu.GetRegister(2));
-			Console.WriteLine(cpu.GetRegister(3));
-			
+			cpu.RunOp((uint)Convert.ToInt32("00000100000000100000000000000110", 2));
+			cpu.RunOp((uint)Convert.ToInt32("00000100000000110000000000000010", 2));
+			cpu.RunOp((uint)Convert.ToInt32("00001000000000000000010001000011", 2));
+			Console.WriteLine(cpu.GetRegister(1));
 		}
 	}
 }
