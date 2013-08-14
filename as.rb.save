@@ -6,10 +6,6 @@ $mnems = {
 	"ldb" => "000100",
 	"stw" => "000101",
 	"stb" => "000110",
-	"ife" => "000111",
-	"ifn" => "001000",
-	"ifl" => "001001",
-	"ifg" => "001010",
 	"add" => "010000",
 	"sub" => "010001",
 	"mul" => "010010",
@@ -38,7 +34,7 @@ $opfmt = {
 	"sub" => [:reg, :reg, :reg]
 }
 
-def getWords(line)
+def GetMnems(line)
 	return line.split(/\W+/)
 end
 
@@ -54,38 +50,22 @@ def assembleOp(mnem, a, b, c)
 	if(mnem == "nop")
 		return "00000000000000000000000000000000"
 	elsif(mnem == "set")
-		return $mnems["set"] + ("0" * 5) + $regs[a] + to16(b.to_i())
-	elsif(mnem == "cop")
-		return $mnems["cop"] + ("0" * 16) + $regs[a] + $regs[b]
+		return $mnems["set"] + "00000" + $regs[a] + to16(b)
 	elsif(mnem == "add")
-		return $mnems["add"] + ("0" * 11) + $regs[a] + $regs[b] + $regs[c]
+		return $mnems["add"] + "00000000000" + $regs[a] + $regs[b] + $regs[c]
 	elsif(mnem == "sub")
-		return $mnems["sub"] + ("0" * 11) + $regs[a] + $regs[b] + $regs[c]
+		return $mnems["sub"] + "00000000000" + $regs[a] + $regs[b] + $regs[c]
 	elsif(mnem == "mul")
-		return $mnems["mul"] + ("0" * 11) + $regs[a] + $regs[b] + $regs[c]
+		return $mnems["mul"] + "00000000000" + $regs[a] + $regs[b] + $regs[c]
 	elsif(mnem == "div")
-		return $mnems["div"] + ("0" * 11) + $regs[a] + $regs[b] + $regs[c]
+		return $mnems["div"] + "00000000000" + $regs[a] + $regs[b] + $regs[c]
 	end
 end
 
-def assembleLine(line)
-	words = getWords(line)
-	op = words[0]
-	p1 = words[1]
-	p2 = words[2]
-	p3 = words[3]
+prog = File.open("prog.bin", "w")
 
-	return assembleOp(op, p1, p2, p3)
-end
-
-prog = File.open(ARGV[1], "w")
-prog_bin = ""
-
-File.open(ARGV[0], "r").each_line do |line|
-	puts line
-	prog_bin += [toBin(assembleLine(line))].pack("N")
-end
-
-prog << prog_bin
+prog << [toBin(assembleOp("set", "g2", 6, nil))].pack("N")
+prog << [toBin(assembleOp("set", "g3", 2, nil))].pack("N")
+prog << [toBin(asse
 
 prog.close()
